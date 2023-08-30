@@ -5,17 +5,25 @@ import PackageDescription
 
 let package = Package(
     name: "AtProtocol",
+    platforms: [
+        .iOS(.v17),
+        .macOS(.v14),
+        .macCatalyst(.v17),
+    ],
     products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "AtProtocol",
             targets: ["AtProtocol"]),
     ],
+    dependencies: [
+        .package(url: "https://github.com/kean/Get.git", .upToNextMajor(from: "2.1.6")),
+    ],
     targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "AtProtocol"),
+            name: "AtProtocol",
+            dependencies: [
+                "Get",
+            ]),
         .testTarget(
             name: "AtProtocolTests",
             dependencies: ["AtProtocol"]),
