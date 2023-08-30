@@ -1,7 +1,7 @@
 import Get
 
 public struct LoginService {
-    private let apiClient = APIClient(configuration: configuration)
+    private var apiClient: APIClient { APIClient(configuration: configuration) }
     
     public func login(identifier: String, password: String) async throws -> Session {
         let loginObject = LoginObject(identifier: identifier, password: password)

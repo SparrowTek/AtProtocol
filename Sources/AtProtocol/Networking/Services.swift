@@ -4,5 +4,5 @@ import SwiftData
 public class Services {
     public init() {}
     
-//    @MainActor public let myService = MyService()
+    public let loginService = LoginService()
 }
