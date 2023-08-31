@@ -56,8 +56,11 @@ class ATAPIClientDelegate: APIClientDelegate {
 
     func client(_ client: APIClient, validateResponse response: HTTPURLResponse, data: Data, task: URLSessionTask) throws {
         guard (200..<300).contains(response.statusCode) else {
-            #warning("Alert user?")
-            throw APIError.unacceptableStatusCode(response.statusCode)
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            
+            guard let errorMessage = try? decoder.decode(ErrorMessage.self, from: data) else { throw APIError.unacceptableStatusCode(response.statusCode) }
+            throw AtError.message(errorMessage)
         }
     }
 
