@@ -1,7 +1,7 @@
 import SwiftData
 
 @Observable
-public class Services {
+public class Lexicons {
     public init() {}
     
     public let loginService = LoginService()
