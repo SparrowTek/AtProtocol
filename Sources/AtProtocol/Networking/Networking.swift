@@ -37,13 +37,13 @@ func shouldPerformRequest(lastFetched: Double, timeLimit: Int = 3600) -> Bool {
 }
 
 var host: String?
-var configuration: APIClient.Configuration = {
+var configuration: APIClient.Configuration {
     guard let host else { fatalError("You must call the setup(host: String) method and set the host before continuing with API requests")}
     var config = APIClient.Configuration(baseURL: URL(string: host), delegate: ATAPIClientDelegate())
     config.decoder = .atDecoder
     config.encoder = .atEncoder
     return config
-}()
+}
 
 class ATAPIClientDelegate: APIClientDelegate {
     func client(_ client: APIClient, willSendRequest request: inout URLRequest) async throws {
