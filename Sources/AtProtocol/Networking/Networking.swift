@@ -53,7 +53,7 @@ var configuration: APIClient.Configuration {
 class ATAPIClientDelegate: APIClientDelegate {
     var session: Session?
     var refreshToken = ""
-    var delegate: ATProtocolDelegate?
+    weak var delegate: ATProtocolDelegate?
     
     init(session: Session?) {
         self.session = session

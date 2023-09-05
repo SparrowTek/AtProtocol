@@ -1,4 +1,4 @@
-public protocol ATProtocolDelegate {
+public protocol ATProtocolDelegate: AnyObject {
     func sessionUpdated(_ session: Session)
 }
 
