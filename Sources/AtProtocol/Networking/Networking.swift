@@ -37,21 +37,44 @@ func shouldPerformRequest(lastFetched: Double, timeLimit: Int = 3600) -> Bool {
 }
 
 var host: String?
+var session: Session?
+
 var configuration: APIClient.Configuration {
     guard let host else { fatalError("You must call the setup(host: String) method and set the host before continuing with API requests")}
-    var config = APIClient.Configuration(baseURL: URL(string: host), delegate: ATAPIClientDelegate())
+    var config = APIClient.Configuration(baseURL: URL(string: host), delegate: ATAPIClientDelegate(session: session))
     config.decoder = .atDecoder
     config.encoder = .atEncoder
     return config
 }
 
 class ATAPIClientDelegate: APIClientDelegate {
+    var session: Session?
+    var refreshToken = ""
+    
+    init(session: Session?) {
+        self.session = session
+    }
+    
     func client(_ client: APIClient, willSendRequest request: inout URLRequest) async throws {
-        // NO-OP
+        if let session {
+            request.setValue(session.accessJwt, forHTTPHeaderField: "Authorization")
+        } else if !refreshToken.isEmpty {
+            request.setValue(refreshToken, forHTTPHeaderField: "Authorization")
+        }
     }
 
     func client(_ client: APIClient, shouldRetry task: URLSessionTask, error: Error, attempts: Int) async throws -> Bool {
-        false // Disabled by default
+        if case .unacceptableStatusCode(let statusCode) = error as? APIError, (400..<500).contains(statusCode), attempts == 1 {
+            refreshToken = session?.refreshJwt ?? ""
+            session = nil
+            let newSession = try await SessionService().refresh()
+            session = newSession
+            #warning("This new session needs to be sent to the package consumer")
+            
+            return true
+        }
+        
+        return false
     }
 
     func client(_ client: APIClient, validateResponse response: HTTPURLResponse, data: Data, task: URLSessionTask) throws {

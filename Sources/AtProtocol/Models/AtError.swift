@@ -15,4 +15,5 @@ public struct ErrorMessage: Codable {
 
 public enum AtErrorType: String, Codable {
     case authenticationRequired = "AuthenticationRequired"
+    case expiredToken = "ExpiredToken"
 }

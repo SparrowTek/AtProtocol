@@ -4,5 +4,5 @@ import SwiftData
 public class Lexicons {
     public init() {}
     
-    public let loginService = LoginService()
+    public let sessionService = SessionService()
 }
