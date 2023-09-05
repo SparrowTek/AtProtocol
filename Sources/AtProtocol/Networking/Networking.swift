@@ -40,7 +40,7 @@ var host: String?
 var session: Session?
 
 var configuration: APIClient.Configuration {
-    guard let host else { fatalError("You must call the setup(host: String) method and set the host before continuing with API requests")}
+    guard let host else { fatalError("You must call the update(hostURL: String) method and set the host before continuing with API requests")}
     var config = APIClient.Configuration(baseURL: URL(string: host), delegate: ATAPIClientDelegate(session: session))
     config.decoder = .atDecoder
     config.encoder = .atEncoder
