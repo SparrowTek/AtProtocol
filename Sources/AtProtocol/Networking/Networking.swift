@@ -37,34 +37,45 @@ func shouldPerformRequest(lastFetched: Double, timeLimit: Int = 3600) -> Bool {
 }
 
 var host: String?
+var delegate: LexiconsDelegate?
 var configuration: APIClient.Configuration = {
     guard let host else { fatalError("You must call the setup(host: String) method and set the host before continuing with API requests")}
-    var config = APIClient.Configuration(baseURL: URL(string: host), delegate: ATAPIClientDelegate())
+    let apiClientDelegate = ATAPIClientDelegate()
+    apiClientDelegate.delegate = delegate
+    var config = APIClient.Configuration(baseURL: URL(string: host), delegate: apiClientDelegate)
     config.decoder = .atDecoder
     config.encoder = .atEncoder
     return config
 }()
 
 class ATAPIClientDelegate: APIClientDelegate {
+    weak var delegate: LexiconsDelegate?
+    
     func client(_ client: APIClient, willSendRequest request: inout URLRequest) async throws {
-        // NO-OP
+        try await delegate?.client(client, willSendRequest: &request)
     }
 
     func client(_ client: APIClient, shouldRetry task: URLSessionTask, error: Error, attempts: Int) async throws -> Bool {
-        false // Disabled by default
+        guard let delegate else { return false }
+        return try await delegate.client(client, shouldRetry: task, error: error, attempts: attempts)
     }
 
     func client(_ client: APIClient, validateResponse response: HTTPURLResponse, data: Data, task: URLSessionTask) throws {
-        guard (200..<300).contains(response.statusCode) else {
-            let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
-            
-            guard let errorMessage = try? decoder.decode(ErrorMessage.self, from: data) else { throw APIError.unacceptableStatusCode(response.statusCode) }
-            throw AtError.message(errorMessage)
+        if let delegate {
+            try delegate.client(client, validateResponse: response, data: data, task: task)
+        } else {
+            guard (200..<300).contains(response.statusCode) else {
+                let decoder = JSONDecoder()
+                decoder.keyDecodingStrategy = .convertFromSnakeCase
+                
+                guard let errorMessage = try? decoder.decode(ErrorMessage.self, from: data) else { throw APIError.unacceptableStatusCode(response.statusCode) }
+                throw AtError.message(errorMessage)
+            }
         }
     }
 
     func client<T>(_ client: APIClient, makeURLForRequest request: Request<T>) throws -> URL? {
-        nil // Use default handlings
+        guard let delegate else { return nil } // Use default handlings
+        return try delegate.client(client, makeURLForRequest: request)
     }
 }
