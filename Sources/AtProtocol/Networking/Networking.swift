@@ -57,9 +57,9 @@ class ATAPIClientDelegate: APIClientDelegate {
     
     func client(_ client: APIClient, willSendRequest request: inout URLRequest) async throws {
         if let session {
-            request.setValue(session.accessJwt, forHTTPHeaderField: "Authorization")
+            request.setValue("Bearer \(session.accessJwt)", forHTTPHeaderField: "Authorization")
         } else if !refreshToken.isEmpty {
-            request.setValue(refreshToken, forHTTPHeaderField: "Authorization")
+            request.setValue("Bearer \(refreshToken)", forHTTPHeaderField: "Authorization")
         }
     }
 
