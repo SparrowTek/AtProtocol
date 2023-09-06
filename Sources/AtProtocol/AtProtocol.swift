@@ -13,7 +13,7 @@ public func setDelegate(_ delegate: ATProtocolDelegate) {
     atProtocoldelegate = delegate
 }
 
-public func updateTokens(access: String, refresh: String) {
+public func updateTokens(access: String?, refresh: String?) {
     accessToken = access
     refreshToken = refresh
 }
