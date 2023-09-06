@@ -37,12 +37,13 @@ func shouldPerformRequest(lastFetched: Double, timeLimit: Int = 3600) -> Bool {
 }
 
 var host: String?
-var session: Session?
+var accessToken: String?
+var refreshToken: String?
 var atProtocoldelegate: ATProtocolDelegate?
 
 var configuration: APIClient.Configuration {
     guard let host else { fatalError("You must call the update(hostURL: String) method and set the host before continuing with API requests")}
-    let apiClientDelegate = ATAPIClientDelegate(session: session)
+    let apiClientDelegate = ATAPIClientDelegate(accessToken: accessToken, refreshToken: refreshToken)
     apiClientDelegate.delegate = atProtocoldelegate
     var config = APIClient.Configuration(baseURL: URL(string: host), delegate: apiClientDelegate)
     config.decoder = .atDecoder
@@ -51,28 +52,30 @@ var configuration: APIClient.Configuration {
 }
 
 class ATAPIClientDelegate: APIClientDelegate {
-    var session: Session?
-    var refreshToken = ""
+    var accessToken: String?
+    var refreshToken: String?
     weak var delegate: ATProtocolDelegate?
+    private var shouldRefreshToken = false
     
-    init(session: Session?) {
-        self.session = session
+    init(accessToken: String?, refreshToken: String?) {
+        self.accessToken = accessToken
+        self.refreshToken = refreshToken
     }
     
     func client(_ client: APIClient, willSendRequest request: inout URLRequest) async throws {
-        if let session {
-            request.setValue("Bearer \(session.accessJwt)", forHTTPHeaderField: "Authorization")
-        } else if !refreshToken.isEmpty {
+        if let accessToken {
+            request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        } else if let refreshToken, shouldRefreshToken {
             request.setValue("Bearer \(refreshToken)", forHTTPHeaderField: "Authorization")
         }
     }
 
     func client(_ client: APIClient, shouldRetry task: URLSessionTask, error: Error, attempts: Int) async throws -> Bool {
         if case .unacceptableStatusCode(let statusCode) = error as? APIError, (400..<500).contains(statusCode), attempts == 1 {
-            refreshToken = session?.refreshJwt ?? ""
-            session = nil
+            accessToken = nil
             let newSession = try await SessionService().refresh()
-            session = newSession
+            accessToken = newSession.accessJwt
+            refreshToken = newSession.refreshJwt
             delegate?.sessionUpdated(newSession)
             
             return true

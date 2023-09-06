@@ -10,6 +10,10 @@ public struct SessionService {
         return try await apiClient.send(Request(path: "/xrpc/com.atproto.server.createSession", method: .post, body: loginObject)).value
     }
     
+    func getCurrent() async throws -> Session {
+        try await apiClient.send(Request(path: "/xrpc/com.atproto.server.getSession")).value
+    }
+    
     func refresh() async throws -> Session {
         try await apiClient.send(Request(path: "/xrpc/com.atproto.server.refreshSession", method: .post)).value
     }
