@@ -12,8 +12,14 @@ typealias Query = [(String, String?)]?
 
 extension JSONDecoder {
     static var atDecoder: JSONDecoder {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSX"
+        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+        dateFormatter.locale = Locale(identifier: "en_US")
+        
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
         
         return decoder
     }
@@ -21,9 +27,14 @@ extension JSONDecoder {
 
 extension JSONEncoder {
     static var atEncoder: JSONEncoder {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSX"
+        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+        dateFormatter.locale = Locale(identifier: "en_US")
+        
         let encoder = JSONEncoder()
         encoder.keyEncodingStrategy = .convertToSnakeCase
-        
+        encoder.dateEncodingStrategy = .formatted(dateFormatter)
         return encoder
     }
 }
