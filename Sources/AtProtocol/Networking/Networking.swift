@@ -74,16 +74,17 @@ class ATAPIClientDelegate: APIClientDelegate {
     }
     
     func client(_ client: APIClient, willSendRequest request: inout URLRequest) async throws {
-        if let accessToken {
-            request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-        } else if let refreshToken, shouldRefreshToken {
+        if let refreshToken, shouldRefreshToken {
+            shouldRefreshToken = false
             request.setValue("Bearer \(refreshToken)", forHTTPHeaderField: "Authorization")
+        } else if let accessToken {
+            request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         }
     }
 
     func client(_ client: APIClient, shouldRetry task: URLSessionTask, error: Error, attempts: Int) async throws -> Bool {
         func getNewToken() async throws -> Bool {
-            accessToken = nil
+            shouldRefreshToken = true
             let newSession = try await SessionService().refresh()
             accessToken = newSession.accessJwt
             refreshToken = newSession.refreshJwt
