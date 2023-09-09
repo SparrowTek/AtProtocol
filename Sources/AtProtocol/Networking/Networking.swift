@@ -82,7 +82,7 @@ class ATAPIClientDelegate: APIClientDelegate {
     }
 
     func client(_ client: APIClient, shouldRetry task: URLSessionTask, error: Error, attempts: Int) async throws -> Bool {
-        if case .unacceptableStatusCode(let statusCode) = error as? APIError, (400..<500).contains(statusCode), attempts == 1 {
+        func getNewToken() async throws -> Bool {
             accessToken = nil
             let newSession = try await SessionService().refresh()
             accessToken = newSession.accessJwt
@@ -90,6 +90,12 @@ class ATAPIClientDelegate: APIClientDelegate {
             delegate?.sessionUpdated(newSession)
             
             return true
+        }
+        
+        if case .unacceptableStatusCode(let statusCode) = error as? APIError, (400..<500).contains(statusCode), attempts == 1 {
+            return try await getNewToken()
+        } else if case .message(let message) = error as? AtError, message.error == AtErrorType.expiredToken.rawValue {
+            return try await getNewToken()
         }
         
         return false
