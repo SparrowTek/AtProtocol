@@ -48,13 +48,23 @@ func shouldPerformRequest(lastFetched: Double, timeLimit: Int = 3600) -> Bool {
 }
 
 var host: String?
-var accessToken: String?
-var refreshToken: String?
+var accessToken: String? {
+    didSet {
+        apiClientDelegate.accessToken = accessToken
+    }
+}
+
+var refreshToken: String? {
+    didSet {
+        apiClientDelegate.refreshToken = refreshToken
+    }
+}
+
 var atProtocoldelegate: ATProtocolDelegate?
 
+let apiClientDelegate = ATAPIClientDelegate()
 var configuration: APIClient.Configuration {
     guard let host else { fatalError("You must call the update(hostURL: String) method and set the host before continuing with API requests")}
-    let apiClientDelegate = ATAPIClientDelegate(accessToken: accessToken, refreshToken: refreshToken)
     apiClientDelegate.delegate = atProtocoldelegate
     var config = APIClient.Configuration(baseURL: URL(string: host), delegate: apiClientDelegate)
     config.decoder = .atDecoder
@@ -67,11 +77,6 @@ class ATAPIClientDelegate: APIClientDelegate {
     var refreshToken: String?
     weak var delegate: ATProtocolDelegate?
     private var shouldRefreshToken = false
-    
-    init(accessToken: String?, refreshToken: String?) {
-        self.accessToken = accessToken
-        self.refreshToken = refreshToken
-    }
     
     func client(_ client: APIClient, willSendRequest request: inout URLRequest) async throws {
         if let refreshToken, shouldRefreshToken {
