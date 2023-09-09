@@ -11,16 +11,6 @@ public struct Profile: Codable {
     public var followersCount: Int
     public var postsCount: Int
     public var indexedAt: Date
-    public var viewer: ProfileViewer
+    public var viewer: Viewer
     public var labels: [String]
-}
-
-public struct ProfileViewer: Codable {
-    public var muted: Bool
-    public var blockedBy: Bool
-    
-    public init(muted: Bool, blockedBy: Bool) {
-        self.muted = muted
-        self.blockedBy = blockedBy
-    }
 }

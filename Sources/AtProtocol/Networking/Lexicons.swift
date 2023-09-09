@@ -6,4 +6,5 @@ public class Lexicons {
     
     public let sessionService = SessionService()
     public let profileService = ProfileService()
+    public let feedService = FeedService()
 }
