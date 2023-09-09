@@ -5,7 +5,7 @@ public struct FeedService {
     
     public init() {}
     
-    public func getFeedGenerators(for did: String) async throws -> Feed {
+    public func getFeedGenerators() async throws -> Feed {
         try await apiClient.send(Request(path: "/xrpc/app.bsky.feed.getFeedGenerators")).value
     }
 }
