@@ -7,7 +7,7 @@ public class Lexicons {
     
     public init() {}
     
-    public func getFeedGenerators(for feeds: [String]) async throws -> [Feed] {
+    public func getFeedGenerators(for feeds: [String]) async throws -> Feeds {
         var query: Query = []
         
         for feed in feeds {

@@ -12,3 +12,7 @@ public struct Feed: Codable {
     public var viewer: Viewer
     public var indexedAt: Date
 }
+
+public struct Feeds: Codable {
+    public var feeds: [Feed]
+}
