@@ -7,7 +7,7 @@ public struct Feed: Codable {
     public var creator: Creator
     public var displayName: String
     public var description: String
-    public var avatar: String
+    public var avatar: String?
     public var likeCount: Int
     public var viewer: Viewer
     public var indexedAt: Date
