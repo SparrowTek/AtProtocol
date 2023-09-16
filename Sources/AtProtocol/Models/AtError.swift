@@ -17,4 +17,5 @@ public enum AtErrorType: String, Codable {
     case authenticationRequired = "AuthenticationRequired"
     case expiredToken = "ExpiredToken"
     case invalidRequest = "InvalidRequest"
+    case methodNotImplemented = "MethodNotImplemented"
 }

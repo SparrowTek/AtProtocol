@@ -18,7 +18,7 @@ public class Lexicons {
     }
     
     public func getPreferences() async throws -> Preferences {
-        try await apiClient.send(Request(path: "/xrpc/app.bsky.feed.getPreferences")).value
+        try await apiClient.send(Request(path: "/xrpc/app.bsky.actor.getPreferences")).value
     }
     
     public func getProfile(for did: String) async throws -> Profile {
