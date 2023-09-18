@@ -2,7 +2,7 @@ public protocol ATProtocolDelegate: AnyObject {
     func sessionUpdated(_ session: Session)
 }
 
-public func setup(hostURL: String, accessJWT: String?, refreshJWT: String?, delegate: ATProtocolDelegate? = nil) {
+public func setup(hostURL: String?, accessJWT: String?, refreshJWT: String?, delegate: ATProtocolDelegate? = nil) {
     host = hostURL
     accessToken = accessJWT
     refreshToken = refreshJWT
