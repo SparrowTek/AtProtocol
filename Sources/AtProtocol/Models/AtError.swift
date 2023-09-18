@@ -18,4 +18,5 @@ public enum AtErrorType: String, Codable {
     case expiredToken = "ExpiredToken"
     case invalidRequest = "InvalidRequest"
     case methodNotImplemented = "MethodNotImplemented"
+    case rateLimitExceeded = "RateLimitExceeded"
 }
