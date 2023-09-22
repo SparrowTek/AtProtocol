@@ -93,7 +93,7 @@ class ATAPIClientDelegate: APIClientDelegate {
             let newSession = try await SessionService().refresh()
             accessToken = newSession.accessJwt
             refreshToken = newSession.refreshJwt
-            delegate?.sessionUpdated(newSession)
+            await delegate?.sessionUpdated(newSession)
             
             return true
         }
