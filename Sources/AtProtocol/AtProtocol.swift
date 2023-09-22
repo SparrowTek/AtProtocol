@@ -1,5 +1,5 @@
 public protocol ATProtocolDelegate: AnyObject {
-    func sessionUpdated(_ session: Session)
+    func sessionUpdated(_ session: Session) async
 }
 
 public func setup(hostURL: String?, accessJWT: String?, refreshJWT: String?, delegate: ATProtocolDelegate? = nil) {
