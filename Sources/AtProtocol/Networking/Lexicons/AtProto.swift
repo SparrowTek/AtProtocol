@@ -1,6 +1,8 @@
+import SwiftData
 import Get
 
-public struct SessionService {
+@Observable
+public class AtProtoLexicons {
     private var apiClient: APIClient { APIClient(configuration: configuration) }
     
     public init() {}
@@ -16,5 +18,10 @@ public struct SessionService {
     
     func refresh() async throws -> Session {
         try await apiClient.send(Request(path: "/xrpc/com.atproto.server.refreshSession", method: .post)).value
+    }
+    
+    // TODO: implement getAccountInviteCodes
+    func getAccountInviteCodes() {
+//    https://bsky.social/xrpc/com.atproto.server.getAccountInviteCodes
     }
 }

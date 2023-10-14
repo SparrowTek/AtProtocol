@@ -2,7 +2,7 @@ import SwiftData
 import Get
 
 @Observable
-public class Lexicons {
+public class BskyLexicons {
     private var apiClient: APIClient { APIClient(configuration: configuration) }
     
     public init() {}
@@ -25,16 +25,14 @@ public class Lexicons {
         try await apiClient.send(Request(path: "/xrpc/app.bsky.actor.getProfile",  query: [("actor", did)])).value
     }
     
-    public func login(identifier: String, password: String) async throws -> Session {
-        let loginObject = LoginObject(identifier: identifier, password: password)
-        return try await apiClient.send(Request(path: "/xrpc/com.atproto.server.createSession", method: .post, body: loginObject)).value
+    // TODO: implement getFollows
+    func getFollows() {
+        
+        //https://bsky.social/xrpc/app.bsky.graph.getFollows?actor=did%3Aplc%3Aaq5iwu4gjdcg2hq53llism3x&limit=100
     }
     
-    public func getCurrent() async throws -> Session {
-        try await apiClient.send(Request(path: "/xrpc/com.atproto.server.getSession")).value
-    }
-    
-    func refresh() async throws -> Session {
-        try await apiClient.send(Request(path: "/xrpc/com.atproto.server.refreshSession", method: .post)).value
+    func getTimeline(limit: Int) async throws -> Timeline {
+        try await apiClient.send(Request(path: "/xrpc/app.bsky.feed.getTimeline", query: [("limit", "\(limit)")])).value
     }
 }
+
