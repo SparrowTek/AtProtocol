@@ -90,7 +90,7 @@ class ATAPIClientDelegate: APIClientDelegate {
     func client(_ client: APIClient, shouldRetry task: URLSessionTask, error: Error, attempts: Int) async throws -> Bool {
         func getNewToken() async throws -> Bool {
             shouldRefreshToken = true
-            let newSession = try await SessionService().refresh()
+            let newSession = try await AtProtoLexicons().refresh()
             accessToken = newSession.accessJwt
             refreshToken = newSession.refreshJwt
             await delegate?.sessionUpdated(newSession)
