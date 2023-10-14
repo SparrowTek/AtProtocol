@@ -26,12 +26,12 @@ public class BskyLexicons {
     }
     
     // TODO: implement getFollows
-    func getFollows() {
+    public func getFollows() {
         
         //https://bsky.social/xrpc/app.bsky.graph.getFollows?actor=did%3Aplc%3Aaq5iwu4gjdcg2hq53llism3x&limit=100
     }
     
-    func getTimeline(limit: Int) async throws -> Timeline {
+    public func getTimeline(limit: Int) async throws -> Timeline {
         try await apiClient.send(Request(path: "/xrpc/app.bsky.feed.getTimeline", query: [("limit", "\(limit)")])).value
     }
 }
