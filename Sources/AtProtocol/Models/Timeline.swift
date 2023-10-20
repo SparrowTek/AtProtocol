@@ -1,16 +1,16 @@
 import Foundation
 
-public struct Timeline: Codable {
+public struct Timeline: Codable, Sendable {
     public var feed: [TimelineItem]
     public var cursor: String
 }
 
-public struct TimelineItem: Codable {
+public struct TimelineItem: Codable, Sendable {
     public let post: Post
     public let reply: Reply
 }
 
-public struct Post: Codable {
+public struct Post: Codable, Sendable {
     public let uri: String
     public let cid: String
     public let author: Author
@@ -23,12 +23,12 @@ public struct Post: Codable {
     public let labels: [String]
 }
 
-public struct Reply: Codable {
+public struct Reply: Codable, Sendable {
     public let root: Root
     public let parent: Parent
 }
 
-public struct Author: Codable {
+public struct Author: Codable, Sendable {
     public let did: String
     public let handle: String
     public let displayName: String
@@ -37,7 +37,7 @@ public struct Author: Codable {
     public let labels: [String]
 }
 
-public struct Record: Codable {
+public struct Record: Codable, Sendable {
     public let text: String
     public let type: String
     public let langs: [String]
@@ -51,22 +51,22 @@ public struct Record: Codable {
     }
 }
 
-public struct ReplyDetail: Codable {
+public struct ReplyDetail: Codable, Sendable {
     public let root: RootDetail
     public let parent: ParentDetail
 }
 
-public struct RootDetail: Codable {
+public struct RootDetail: Codable, Sendable {
     public let cid: String
     public let uri: String
 }
 
-public struct ParentDetail: Codable {
+public struct ParentDetail: Codable, Sendable {
     public let cid: String
     public let uri: String
 }
 
-public struct Root: Codable {
+public struct Root: Codable, Sendable {
     public let type: String
     public let uri: String
     public let cid: String
@@ -85,7 +85,7 @@ public struct Root: Codable {
     }
 }
 
-public struct Parent: Codable {
+public struct Parent: Codable, Sendable {
     public let type: String
     public let uri: String
     public let cid: String

@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Profile: Codable {
+public struct Profile: Codable, Sendable {
     public let did: String
     public var handle: String
     public var displayName: String

@@ -1,4 +1,4 @@
-public struct Viewer: Codable {
+public struct Viewer: Codable, Sendable {
     public var muted: Bool?
     public var blockedBy: Bool?
     public var following: String?

@@ -1,4 +1,4 @@
-public struct Session: Codable {
+public struct Session: Codable, Sendable {
     public let did: String
     public let handle: String
     public let email: String?
