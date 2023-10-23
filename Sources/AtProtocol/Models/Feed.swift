@@ -13,6 +13,6 @@ public struct Feed: Codable, Sendable {
     public var indexedAt: Date
 }
 
-public struct Feeds: Codable {
+public struct Feeds: Codable, Sendable {
     public var feeds: [Feed]
 }
