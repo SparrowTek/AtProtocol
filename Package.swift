@@ -15,15 +15,11 @@ let package = Package(
             name: "AtProtocol",
             targets: ["AtProtocol"]),
     ],
-    dependencies: [
-        .package(url: "https://github.com/kean/Get.git", .upToNextMajor(from: "2.1.6")),
-    ],
+    dependencies: [],
     targets: [
         .target(
             name: "AtProtocol",
-            dependencies: [
-                "Get",
-            ]),
+            dependencies: []),
         .testTarget(
             name: "AtProtocolTests",
             dependencies: ["AtProtocol"]),

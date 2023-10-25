@@ -1,28 +1,21 @@
 import SwiftData
-import Get
 
 @Observable
 public class BskyLexicons {
-    private var apiClient: APIClient { APIClient(configuration: configuration) }
+    private let router = NetworkRouter<BskyAPI>(decoder: .atDecoder)
     
     public init() {}
     
     public func getFeedGenerators(for feeds: [String]) async throws -> Feeds {
-        var query: Query = []
-        
-        for feed in feeds {
-            query?.append(("feeds", feed))
-        }
-
-        return try await apiClient.send(Request(path: "/xrpc/app.bsky.feed.getFeedGenerators", query: query)).value
+        try await router.execute(.getFeedGenerators(feeds: feeds))
     }
     
     public func getPreferences() async throws -> Preferences {
-        try await apiClient.send(Request(path: "/xrpc/app.bsky.actor.getPreferences")).value
+        try await router.execute(.getPreferences)
     }
     
     public func getProfile(for did: String) async throws -> Profile {
-        try await apiClient.send(Request(path: "/xrpc/app.bsky.actor.getProfile",  query: [("actor", did)])).value
+        try await router.execute(.getProfile(did: did))
     }
     
     // TODO: implement getFollows
@@ -32,7 +25,7 @@ public class BskyLexicons {
     }
     
     public func getTimeline(limit: Int) async throws -> Timeline {
-        try await apiClient.send(Request(path: "/xrpc/app.bsky.feed.getTimeline", query: [("limit", "\(limit)")])).value
+        try await router.execute(.getTimeline(limit: limit))
     }
 }
 

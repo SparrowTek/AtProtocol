@@ -1,23 +1,21 @@
 import SwiftData
-import Get
 
 @Observable
 public class AtProtoLexicons {
-    private var apiClient: APIClient { APIClient(configuration: configuration) }
+    private let router = NetworkRouter<AtProtoAPI>(decoder: .atDecoder)
     
     public init() {}
     
     public func login(identifier: String, password: String) async throws -> Session {
-        let loginObject = LoginObject(identifier: identifier, password: password)
-        return try await apiClient.send(Request(path: "/xrpc/com.atproto.server.createSession", method: .post, body: loginObject)).value
+        try await router.execute(.login(identifier: identifier, password: password))
     }
     
     public func getCurrent() async throws -> Session {
-        try await apiClient.send(Request(path: "/xrpc/com.atproto.server.getSession")).value
+        try await router.execute(.getCurrent)
     }
     
     func refresh() async throws -> Session {
-        try await apiClient.send(Request(path: "/xrpc/com.atproto.server.refreshSession", method: .post)).value
+        try await router.execute(.refresh)
     }
     
     // TODO: implement getAccountInviteCodes
