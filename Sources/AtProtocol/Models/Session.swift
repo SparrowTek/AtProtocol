@@ -13,3 +13,5 @@ public struct Session: Codable, Sendable {
         self.refreshJwt = refreshJwt
     }
 }
+
+extension Session: Equatable {}
