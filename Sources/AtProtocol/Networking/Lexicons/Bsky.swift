@@ -2,7 +2,11 @@ import SwiftData
 
 @Observable
 public class BskyLexicons {
-    private let router = NetworkRouter<BskyAPI>(decoder: .atDecoder)
+    private let router: NetworkRouter<BskyAPI> = {
+        let router = NetworkRouter<BskyAPI>(decoder: .atDecoder)
+        router.delegate = routerDelegate
+        return router
+    }()
     
     public init() {}
     

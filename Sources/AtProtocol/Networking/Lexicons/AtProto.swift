@@ -2,7 +2,11 @@ import SwiftData
 
 @Observable
 public class AtProtoLexicons {
-    private let router = NetworkRouter<AtProtoAPI>(decoder: .atDecoder)
+    private let router: NetworkRouter<AtProtoAPI> = {
+        let router = NetworkRouter<AtProtoAPI>(decoder: .atDecoder)
+        router.delegate = routerDelegate
+        return router
+    }()
     
     public init() {}
     
@@ -14,8 +18,8 @@ public class AtProtoLexicons {
         try await router.execute(.getCurrent)
     }
     
-    func refresh() async throws -> Session {
-        try await router.execute(.refresh)
+    func refresh(attempts: Int = 1) async throws -> Session {
+        try await router.execute(.refresh, attempts: attempts)
     }
     
     // TODO: implement getAccountInviteCodes

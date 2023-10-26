@@ -69,7 +69,7 @@ class AtProtoRouterDelegate: NetworkRouterDelegate {
     func shouldRetry(error: Error, attempts: Int) async throws -> Bool {
         func getNewToken() async throws -> Bool {
             shouldRefreshToken = true
-            let newSession = try await AtProtoLexicons().refresh()
+            let newSession = try await AtProtoLexicons().refresh(attempts: attempts + 1)
             accessToken = newSession.accessJwt
             refreshToken = newSession.refreshJwt
             await delegate?.sessionUpdated(newSession)
