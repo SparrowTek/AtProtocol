@@ -68,15 +68,19 @@ class NetworkRouter<Endpoint: EndpointType>: NetworkRouterProtocol {
             let statusNetworkError = AtError.network(NetworkError.statusCode(statusCode, data: data))
             
             guard let delegate else { throw statusNetworkError }
-            if try await delegate.shouldRetry(error: statusNetworkError, attempts: attempts) {
-                return try await execute(route, attempts: attempts + 1)
+            
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            
+            let errorToThrow: AtError
+            if let errorMessage = try? decoder.decode(ErrorMessage.self, from: data) {
+                errorToThrow = AtError.message(errorMessage)
             } else {
-                let decoder = JSONDecoder()
-                decoder.keyDecodingStrategy = .convertFromSnakeCase
-                
-                guard let errorMessage = try? decoder.decode(ErrorMessage.self, from: data) else { throw statusNetworkError }
-                throw AtError.message(errorMessage)
+                errorToThrow = statusNetworkError
             }
+            
+            guard try await delegate.shouldRetry(error: errorToThrow, attempts: attempts) else { throw errorToThrow }
+            return try await execute(route, attempts: attempts + 1)
         }
     }
     
