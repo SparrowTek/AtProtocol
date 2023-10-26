@@ -26,7 +26,7 @@ extension AtProtoAPI: EndpointType {
     var httpMethod: HTTPMethod {
         switch self {
         case .login, .refresh:
-            return .get
+            return .post
         case .getCurrent, .getAccountInviteCodes:
             return .get
         }
