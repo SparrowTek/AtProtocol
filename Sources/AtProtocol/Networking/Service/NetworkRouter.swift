@@ -71,7 +71,11 @@ class NetworkRouter<Endpoint: EndpointType>: NetworkRouterProtocol {
             if try await delegate.shouldRetry(error: error, attempts: attempts) {
                 return try await execute(route, attempts: attempts + 1)
             } else {
-                throw error
+                let decoder = JSONDecoder()
+                decoder.keyDecodingStrategy = .convertFromSnakeCase
+                
+                guard let errorMessage = try? decoder.decode(ErrorMessage.self, from: data) else { throw error }
+                throw AtError.message(errorMessage)
             }
         }
     }
