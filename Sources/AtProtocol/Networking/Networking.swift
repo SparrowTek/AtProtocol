@@ -77,7 +77,8 @@ class AtProtoRouterDelegate: NetworkRouterDelegate {
             return true
         }
         
-        if case .statusCode(let statusCode, _) = error as? NetworkError, let statusCode = statusCode?.rawValue, (400..<500).contains(statusCode), attempts == 1 {
+        // TODO: verify this works!
+        if case .network(let networkError) = error as? AtError, case .statusCode(let statusCode, _) = networkError, let statusCode = statusCode?.rawValue, (400..<500).contains(statusCode), attempts == 1 {
             return try await getNewToken()
         } else if case .message(let message) = error as? AtError, message.error == AtErrorType.expiredToken.rawValue {
             return try await getNewToken()

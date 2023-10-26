@@ -1,5 +1,6 @@
 public enum AtError: Error {
     case message(ErrorMessage)
+    case network(NetworkError)
 }
 
 public struct ErrorMessage: Codable, Sendable {
