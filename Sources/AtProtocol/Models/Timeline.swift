@@ -32,25 +32,105 @@ public struct Post: Codable, Sendable {
 
 public struct Embed: Codable, Sendable {
     public let type: String
-    public let images: [EmbedImage]?
+    public let images: [EmbeddedMedia]?
+    public let media: Media?
+    public let record: EmbedRecord?
+    public let external: EmbedExternal?
     
     enum CodingKeys: String, CodingKey {
-        case images
+        case images, media, record, external
         case type = "$type"
+    }
+}
+
+public struct EmbedExternal: Codable, Sendable {
+    public let uri: String
+    public let thumb: TimelineImage?
+    public let title: String
+    public let externalDescription: String
+    
+    enum CodingKeys: String, CodingKey {
+        case uri, thumb, title
+        case externalDescription = "description"
+    }
+}
+
+public struct EmbedRecord: Codable, Sendable {
+    public let type: String?
+    public let record: UnpopulatedPost?
+    
+    enum CodingKeys: String, CodingKey {
+        case record
+        case type = "$type"
+    }
+}
+
+public struct Media: Codable, Sendable {
+    public let type: String
+    public let images: [EmbeddedMedia]?
+    
+    enum CodingKeys: String, CodingKey {
+        case type = "$type"
+        case images
     }
 }
 
 public enum EmbedType: String, Codable {
     case image = "app.bsky.embed.images"
     case recordWithMedia = "app.bsky.embed.recordWithMedia"
+    case external = "app.bsky.embed.external"
+    case record = "app.bsky.embed.record"
 }
 
-public struct EmbedImage: Codable, Sendable {
-    public let thumb: String
-    public let fullsize: String
+public enum TimelineImage: Codable, Sendable {
+    case string(String)
+    case image(EmbeddedImage)
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        
+        if let string = try? container.decode(String.self) {
+            self = .string(string)
+            return
+        }
+        
+        if let image = try? container.decode(EmbeddedImage.self) {
+            self = .image(image)
+            return
+        }
+        
+        throw DecodingError.typeMismatch(TimelineImage.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for MyProperty"))
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case .string(let string):
+            try container.encode(string)
+        case .image(let image):
+            try container.encode(image)
+        }
+    }
+}
+
+public struct EmbeddedMedia: Codable, Sendable {
+    public let thumb: TimelineImage?
+    public let fullsize: String?
     public let alt: String
     public let aspectRatio: EmbedImageAspectRatio?
-      
+    public let image: TimelineImage?
+}
+
+public struct EmbeddedImage: Codable, Sendable {
+    public let type: String
+    public let ref: [String : String]
+    public let mimeType: String
+    public let size: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case type = "$type"
+        case ref, mimeType, size
+    }
 }
 
 public struct EmbedImageAspectRatio: Codable, Sendable {
@@ -78,25 +158,20 @@ public struct Record: Codable, Sendable {
     public let langs: [String]
     public let reply: ReplyDetail?
     public let createdAt: String
+    public let embed: Embed?
     
     enum CodingKeys: String, CodingKey {
-        case text
         case type = "$type"
-        case langs, reply, createdAt
+        case langs, reply, createdAt, embed, text
     }
 }
 
 public struct ReplyDetail: Codable, Sendable {
-    public let root: RootDetail
-    public let parent: ParentDetail
+    public let root: UnpopulatedPost
+    public let parent: UnpopulatedPost
 }
 
-public struct RootDetail: Codable, Sendable {
-    public let cid: String
-    public let uri: String
-}
-
-public struct ParentDetail: Codable, Sendable {
+public struct UnpopulatedPost: Codable, Sendable {
     public let cid: String
     public let uri: String
 }
