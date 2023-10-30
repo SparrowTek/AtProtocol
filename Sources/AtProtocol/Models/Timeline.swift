@@ -21,6 +21,7 @@ public struct Post: Codable, Sendable {
     public let cid: String
     public let author: Author
     public let record: Record
+    public let facets: PostFacet?
     public let replyCount: Int
     public let repostCount: Int
     public let likeCount: Int
@@ -28,6 +29,32 @@ public struct Post: Codable, Sendable {
     public let viewer: Viewer
     public let labels: [String]
     public let embed: Embed?
+}
+
+public struct PostFacet: Codable, Sendable {
+    public let facets: [Facet]
+    public let createdAt: Date
+}
+
+public struct Facet: Codable, Sendable {
+    public let index: FacetIndex
+    public let features: [FacetFeature]
+    
+}
+
+public struct FacetFeature: Codable, Sendable {
+    public let uri: String
+    public let type: String
+    
+    enum CodingKeys: String, CodingKey {
+        case uri
+        case type = "$type"
+    }
+}
+
+public struct FacetIndex: Codable, Sendable {
+    public let byteEnd: Int
+    public let byteStart: Int
 }
 
 public struct Embed: Codable, Sendable {
@@ -58,10 +85,31 @@ public struct EmbedExternal: Codable, Sendable {
 public struct EmbedRecord: Codable, Sendable {
     public let type: String?
     public let record: UnpopulatedPost?
+    public let uri: String?
+    public let cid: String?
+    public let author: Author?
+    public let value: EmbedRecordValue?
+//    public let labels: [String]
+//    public let indexedAt: Date
+//    public let embeds: [String] // TODO: This isn't correct
+    
     
     enum CodingKeys: String, CodingKey {
-        case record
         case type = "$type"
+        case record, uri, cid, author, value/*, labels, indexedAt, embeds*/
+    }
+}
+
+public struct EmbedRecordValue: Codable, Sendable {
+    public let text: String
+    public let type: String
+    public let langs: [String]
+    public let reply: ReplyDetail?
+    public let createdAt: String
+    
+    enum CodingKeys: String, CodingKey {
+        case type = "$type"
+        case langs, reply, createdAt, text
     }
 }
 
