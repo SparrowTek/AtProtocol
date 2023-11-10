@@ -10,6 +10,12 @@ public struct TimelineItem: Codable, Sendable {
     public let reply: Reply?
 }
 
+extension TimelineItem: Equatable {
+    public static func == (lhs: TimelineItem, rhs: TimelineItem) -> Bool {
+        lhs.post.uri == rhs.post.uri && lhs.post.cid == rhs.post.cid
+    }
+}
+
 extension TimelineItem: Identifiable {
     public var id: UUID {
         UUID()
@@ -130,7 +136,7 @@ public enum EmbedType: String, Codable {
     case record = "app.bsky.embed.record"
 }
 
-public enum TimelineImage: Codable, Sendable {
+public enum TimelineImage: Codable, Sendable, Identifiable {
     case string(String)
     case image(EmbeddedImage)
     
@@ -159,6 +165,8 @@ public enum TimelineImage: Codable, Sendable {
             try container.encode(image)
         }
     }
+    
+    public var id: UUID { UUID() }
 }
 
 public struct EmbeddedMedia: Codable, Sendable {
