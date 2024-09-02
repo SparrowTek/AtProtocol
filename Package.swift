@@ -19,7 +19,9 @@ let package = Package(
     targets: [
         .target(
             name: "AtProtocol",
-            dependencies: []),
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency")
+            ]),
         .testTarget(
             name: "AtProtocolTests",
             dependencies: ["AtProtocol"]),
