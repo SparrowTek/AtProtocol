@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Feed: Codable, Sendable {
+public struct Feed: APCodable {
     public var uri: String
     public var cid: String
     public let did: String

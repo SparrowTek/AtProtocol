@@ -1,11 +1,11 @@
 import Foundation
 
-public struct Timeline: Codable, Sendable {
+public struct Timeline: APCodable {
     public var feed: [TimelineItem]
     public var cursor: String
 }
 
-public struct TimelineItem: Codable, Sendable {
+public struct TimelineItem: APCodable {
     public let post: Post
     public let reply: Reply?
 }
@@ -22,7 +22,7 @@ extension TimelineItem: Identifiable {
     }
 }
 
-public struct Post: Codable, Sendable {
+public struct Post: APCodable {
     public let uri: String
     public let cid: String
     public let author: Author
@@ -37,18 +37,18 @@ public struct Post: Codable, Sendable {
     public let embed: Embed?
 }
 
-public struct PostFacet: Codable, Sendable {
+public struct PostFacet: APCodable {
     public let facets: [Facet]
     public let createdAt: Date
 }
 
-public struct Facet: Codable, Sendable {
+public struct Facet: APCodable {
     public let index: FacetIndex
     public let features: [FacetFeature]
     
 }
 
-public struct FacetFeature: Codable, Sendable {
+public struct FacetFeature: APCodable {
     public let uri: String
     public let type: String
     
@@ -58,12 +58,12 @@ public struct FacetFeature: Codable, Sendable {
     }
 }
 
-public struct FacetIndex: Codable, Sendable {
+public struct FacetIndex: APCodable {
     public let byteEnd: Int
     public let byteStart: Int
 }
 
-public struct Embed: Codable, Sendable {
+public struct Embed: APCodable {
     public let type: String
     public let images: [EmbeddedMedia]?
     public let media: Media?
@@ -76,7 +76,7 @@ public struct Embed: Codable, Sendable {
     }
 }
 
-public struct EmbedExternal: Codable, Sendable {
+public struct EmbedExternal: APCodable {
     public let uri: String
     public let thumb: TimelineImage?
     public let title: String
@@ -88,7 +88,7 @@ public struct EmbedExternal: Codable, Sendable {
     }
 }
 
-public struct EmbedRecord: Codable, Sendable {
+public struct EmbedRecord: APCodable {
     public let type: String?
     public let record: UnpopulatedPost?
     public let uri: String?
@@ -106,7 +106,7 @@ public struct EmbedRecord: Codable, Sendable {
     }
 }
 
-public struct EmbedRecordValue: Codable, Sendable {
+public struct EmbedRecordValue: APCodable {
     public let text: String
     public let type: String
     public let langs: [String]
@@ -119,7 +119,7 @@ public struct EmbedRecordValue: Codable, Sendable {
     }
 }
 
-public struct Media: Codable, Sendable {
+public struct Media: APCodable {
     public let type: String
     public let images: [EmbeddedMedia]?
     
@@ -129,14 +129,14 @@ public struct Media: Codable, Sendable {
     }
 }
 
-public enum EmbedType: String, Codable {
+public enum EmbedType: String, APCodable {
     case image = "app.bsky.embed.images"
     case recordWithMedia = "app.bsky.embed.recordWithMedia"
     case external = "app.bsky.embed.external"
     case record = "app.bsky.embed.record"
 }
 
-public enum TimelineImage: Codable, Sendable, Identifiable {
+public enum TimelineImage: APCodable, Identifiable {
     case string(String)
     case image(EmbeddedImage)
     
@@ -169,7 +169,7 @@ public enum TimelineImage: Codable, Sendable, Identifiable {
     public var id: UUID { UUID() }
 }
 
-public struct EmbeddedMedia: Codable, Sendable {
+public struct EmbeddedMedia: APCodable {
     public let thumb: TimelineImage?
     public let fullsize: String?
     public let alt: String
@@ -177,7 +177,7 @@ public struct EmbeddedMedia: Codable, Sendable {
     public let image: TimelineImage?
 }
 
-public struct EmbeddedImage: Codable, Sendable {
+public struct EmbeddedImage: APCodable {
     public let type: String
     public let ref: [String : String]
     public let mimeType: String
@@ -189,17 +189,17 @@ public struct EmbeddedImage: Codable, Sendable {
     }
 }
 
-public struct EmbedImageAspectRatio: Codable, Sendable {
+public struct EmbedImageAspectRatio: APCodable {
     public let width: Int
     public let height: Int
 }
 
-public struct Reply: Codable, Sendable {
+public struct Reply: APCodable {
     public let root: Root
     public let parent: Parent
 }
 
-public struct Author: Codable, Sendable {
+public struct Author: APCodable {
     public let did: String
     public let handle: String
     public let displayName: String?
@@ -208,7 +208,7 @@ public struct Author: Codable, Sendable {
     public let labels: [String]
 }
 
-public struct Record: Codable, Sendable {
+public struct Record: APCodable {
     public let text: String
     public let type: String
     public let langs: [String]
@@ -222,17 +222,17 @@ public struct Record: Codable, Sendable {
     }
 }
 
-public struct ReplyDetail: Codable, Sendable {
+public struct ReplyDetail: APCodable {
     public let root: UnpopulatedPost
     public let parent: UnpopulatedPost
 }
 
-public struct UnpopulatedPost: Codable, Sendable {
+public struct UnpopulatedPost: APCodable {
     public let cid: String
     public let uri: String
 }
 
-public struct Root: Codable, Sendable {
+public struct Root: APCodable {
     public let type: String
     public let uri: String
     public let cid: String
@@ -251,7 +251,7 @@ public struct Root: Codable, Sendable {
     }
 }
 
-public struct Parent: Codable, Sendable {
+public struct Parent: APCodable {
     public let type: String
     public let uri: String
     public let cid: String

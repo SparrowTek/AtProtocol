@@ -1,10 +1,10 @@
 import SwiftData
 
-@Observable
-public class BskyLexicons {
+@APActor
+public struct BskyLexicons: Sendable {
     private let router: NetworkRouter<BskyAPI> = {
         let router = NetworkRouter<BskyAPI>(decoder: .atDecoder)
-        router.delegate = routerDelegate
+        router.delegate = APEnvironment.current.routerDelegate
         return router
     }()
     

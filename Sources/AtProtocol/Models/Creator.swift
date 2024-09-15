@@ -1,5 +1,5 @@
 
-public struct Creator: Codable, Sendable {
+public struct Creator: APCodable {
     public let did: String
     public var handle: String
     public var displayName: String

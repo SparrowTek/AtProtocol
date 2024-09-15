@@ -1,17 +1,18 @@
 import Foundation
 
-typealias Parameters = [String:Any]
+typealias Parameters = [String : Any]
 
 protocol ParameterEncoder {
     func encode(urlRequest: inout URLRequest, with parameters: Parameters) throws
 }
 
-enum ParameterEncoding {
+@APActor
+enum ParameterEncoding: Sendable {
     
     case urlEncoding(parameters: Parameters)
     case jsonEncoding(parameters: Parameters)
     case jsonDataEncoding(data: Data?)
-    case jsonEncodableEncoding(encodable: Encodable)
+    case jsonEncodableEncoding(encodable: APEncodable)
     case urlAndJsonEncoding(urlParameters: Parameters, bodyParameters: Parameters)
     
     func encode(urlRequest: inout URLRequest) throws {

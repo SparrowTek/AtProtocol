@@ -1,10 +1,10 @@
 import SwiftData
 
-@Observable
-public class AtProtoLexicons {
+@APActor
+public struct AtProtoLexicons: Sendable {
     private let router: NetworkRouter<AtProtoAPI> = {
         let router = NetworkRouter<AtProtoAPI>(decoder: .atDecoder)
-        router.delegate = routerDelegate
+        router.delegate = APEnvironment.current.routerDelegate
         return router
     }()
     

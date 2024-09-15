@@ -1,4 +1,4 @@
-public struct LoginObject: Codable, Sendable {
+public struct LoginObject: APCodable {
     public let identifier: String
     public let password: String
 }

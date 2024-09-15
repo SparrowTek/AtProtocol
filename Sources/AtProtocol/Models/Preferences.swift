@@ -1,10 +1,10 @@
 import Foundation
 
-public struct Preferences: Codable, Sendable {
+public struct Preferences: APCodable {
     public var preferences: [Preference]
 }
 
-public struct Preference: Codable, Sendable {
+public struct Preference: APCodable {
     public let type: String
     public var saved: [String]
     public var pinned: [String]

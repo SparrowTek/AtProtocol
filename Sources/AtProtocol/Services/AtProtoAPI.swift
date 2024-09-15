@@ -9,9 +9,11 @@ enum AtProtoAPI {
 
 extension AtProtoAPI: EndpointType {
     public var baseURL: URL {
-        guard let host else { fatalError("You must call the update(hostURL: String) method and set the host before continuing with API requests")}
-        guard let url = URL(string: host) else { fatalError("baseURL not configured.") }
-        return url
+        get async {
+            guard let host = await APEnvironment.current.host else { fatalError("Host not set.") }
+            guard let url = URL(string: host) else { fatalError("ATProto baseURL not configured.") }
+            return url
+        }
     }
     
     var path: String {
@@ -46,4 +48,3 @@ extension AtProtoAPI: EndpointType {
         nil
     }
 }
-

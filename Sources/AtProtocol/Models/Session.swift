@@ -1,4 +1,4 @@
-public struct Session: Codable, Sendable {
+public struct Session: APCodable {
     public let did: String
     public let handle: String
     public let email: String?

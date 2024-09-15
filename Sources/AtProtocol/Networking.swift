@@ -1,8 +1,8 @@
 //
 //  Networking.swift
+//  AtProtocol
 //
-//
-//  Created by Thomas Rademaker on 8/30/23.
+//  Created by Thomas Rademaker on 9/15/24.
 //
 
 import Foundation
@@ -30,38 +30,16 @@ func shouldPerformRequest(lastFetched: Double, timeLimit: Int = 3600) -> Bool {
     return differenceInMinutes >= timeLimit
 }
 
-var host: String?
-var accessToken: String? {
-    didSet {
-        routerDelegate.accessToken = accessToken
-    }
-}
-
-var refreshToken: String? {
-    didSet {
-        routerDelegate.refreshToken = refreshToken
-    }
-}
-
-var atProtocoldelegate: ATProtocolDelegate? {
-    didSet {
-        routerDelegate.delegate = atProtocoldelegate
-    }
-}
-
-let routerDelegate = AtProtoRouterDelegate()
-
-class AtProtoRouterDelegate: NetworkRouterDelegate {
-    var accessToken: String?
-    var refreshToken: String?
+@APActor
+class APRouterDelegate: NetworkRouterDelegate {
     weak var delegate: ATProtocolDelegate?
     private var shouldRefreshToken = false
     
     func intercept(_ request: inout URLRequest) async {
-        if let refreshToken, shouldRefreshToken {
+        if let refreshToken = APEnvironment.current.refreshToken, shouldRefreshToken {
             shouldRefreshToken = false
             request.setValue("Bearer \(refreshToken)", forHTTPHeaderField: "Authorization")
-        } else if let accessToken {
+        } else if let accessToken = APEnvironment.current.accessToken {
             request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         }
     }
@@ -70,8 +48,8 @@ class AtProtoRouterDelegate: NetworkRouterDelegate {
         func getNewToken() async throws -> Bool {
             shouldRefreshToken = true
             let newSession = try await AtProtoLexicons().refresh(attempts: attempts + 1)
-            accessToken = newSession.accessJwt
-            refreshToken = newSession.refreshJwt
+            APEnvironment.current.accessToken = newSession.accessJwt
+            APEnvironment.current.refreshToken = newSession.refreshJwt
             await delegate?.sessionUpdated(newSession)
             
             return true

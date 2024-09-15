@@ -1,6 +1,6 @@
 import Foundation
 
-public enum StatusCode: Int {
+public enum StatusCode: Int, Sendable {
     // 1xx
     case continueCode = 100
     case switchingProtocols = 101
@@ -74,4 +74,3 @@ public enum StatusCode: Int {
     case notExtended = 510
     case networkAuthenticationRequired = 511
 }
-
