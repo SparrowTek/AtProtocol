@@ -109,7 +109,7 @@ public struct EmbedRecord: APCodable {
 public struct EmbedRecordValue: APCodable {
     public let text: String
     public let type: String
-    public let langs: [String]
+    public let langs: [String]?
     public let reply: ReplyDetail?
     public let createdAt: String
     
@@ -205,13 +205,21 @@ public struct Author: APCodable {
     public let displayName: String?
     public let avatar: String
     public let viewer: Viewer
-    public let labels: [String]
+    public let labels: [AuthorLabels]
+}
+
+public struct AuthorLabels: APCodable {
+    public let src: String
+    public let uri: String
+    public let cid: String
+    public let val: String
+    public let cts: String
 }
 
 public struct Record: APCodable {
     public let text: String
     public let type: String
-    public let langs: [String]
+    public let langs: [String]?
     public let reply: ReplyDetail?
     public let createdAt: String
     public let embed: Embed?
