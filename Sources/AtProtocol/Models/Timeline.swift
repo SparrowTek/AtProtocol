@@ -24,7 +24,7 @@ extension TimelineItem: Identifiable {
 
 public struct Post: APCodable {
     public let uri: String
-    public let cid: String
+    public let cid: String?
     public let author: Author
     public let record: Record
     public let facets: PostFacet?
