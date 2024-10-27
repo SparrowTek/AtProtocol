@@ -23,7 +23,7 @@ extension TimelineItem: Identifiable {
 }
 
 public struct Post: APCodable {
-    public let uri: String
+    public let uri: String?
     public let cid: String?
     public let author: Author
     public let record: Record
@@ -49,12 +49,32 @@ public struct Facet: APCodable {
 }
 
 public struct FacetFeature: APCodable {
-    public let uri: String
-    public let type: String
+    public let uri: String?
+    public let type: FacetType
     
     enum CodingKeys: String, CodingKey {
         case uri
         case type = "$type"
+    }
+}
+
+public enum FacetType: APCodable {
+    case link(String)
+    case unknown(String)
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let value = try container.decode(String.self)
+        
+        switch value {
+        case "app.bsky.richtext.facet#link": self = .link(value)
+        default: self = .unknown(value)
+        }
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(self)
     }
 }
 
@@ -77,7 +97,7 @@ public struct Embed: APCodable {
 }
 
 public struct EmbedExternal: APCodable {
-    public let uri: String
+    public let uri: String?
     public let thumb: TimelineImage?
     public let title: String
     public let externalDescription: String
@@ -210,8 +230,8 @@ public struct Author: APCodable {
 
 public struct AuthorLabels: APCodable {
     public let src: String
-    public let uri: String
-    public let cid: String
+    public let uri: String?
+    public let cid: String?
     public let val: String
     public let cts: String
 }
@@ -236,14 +256,14 @@ public struct ReplyDetail: APCodable {
 }
 
 public struct UnpopulatedPost: APCodable {
-    public let cid: String
-    public let uri: String
+    public let cid: String?
+    public let uri: String?
 }
 
 public struct Root: APCodable {
     public let type: String
-    public let uri: String
-    public let cid: String
+    public let uri: String?
+    public let cid: String?
     public let author: Author
     public let record: Record
     public let replyCount: Int
@@ -261,8 +281,8 @@ public struct Root: APCodable {
 
 public struct Parent: APCodable {
     public let type: String
-    public let uri: String
-    public let cid: String
+    public let uri: String?
+    public let cid: String?
     public let author: Author
     public let record: Record
     public let replyCount: Int
