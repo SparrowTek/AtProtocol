@@ -74,7 +74,10 @@ public enum FacetType: APCodable {
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
-        try container.encode(self)
+        switch self {
+        case .link(let value), .unknown(let value):
+            try container.encode(value)
+        }
     }
 }
 
