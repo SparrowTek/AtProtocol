@@ -226,7 +226,7 @@ public struct Author: APCodable {
     public let did: String
     public let handle: String
     public let displayName: String?
-    public let avatar: String
+    public let avatar: String?
     public let viewer: Viewer
     public let labels: [AuthorLabels]
 }
