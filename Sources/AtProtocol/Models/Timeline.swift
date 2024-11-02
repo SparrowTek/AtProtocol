@@ -9,6 +9,57 @@ public struct TimelineItem: APCodable {
     public let post: Post
     public let reply: Reply?
 }
+/*
+{
+      "post": {
+        "uri": "at://did:plc:gkqxrdozmfap5ehgd5xlhem2/app.bsky.feed.post/3l7r3os55mj2r",
+        "cid": "bafyreign5fpvfsfj6xriqbdkp3pwf5lmcfzvkedxy6yi3csxmwfkf7cdiu",
+        "author": {
+          "did": "did:plc:gkqxrdozmfap5ehgd5xlhem2",
+          "handle": "atprotesting123.bsky.social",
+          "viewer": {
+            "muted": false,
+            "blockedBy": false,
+            "following": "at://did:plc:aq5iwu4gjdcg2hq53llism3x/app.bsky.graph.follow/3l7oxdij6km2a",
+            "followedBy": "at://did:plc:gkqxrdozmfap5ehgd5xlhem2/app.bsky.graph.follow/3kcyrue74z32v"
+          },
+          "labels": [],
+          "createdAt": "2023-10-30T21:44:11.344Z"
+        },
+        "record": {
+          "$type": "app.bsky.feed.post",
+          "createdAt": "2024-10-30T21:30:34.509Z",
+          "facets": [
+            {
+              "features": [
+                {
+                  "$type": "app.bsky.richtext.facet#link",
+                  "uri": "https://x.com"
+                }
+              ],
+              "index": {
+                "byteEnd": 5,
+                "byteStart": 0
+              }
+            }
+          ],
+          "langs": [
+            "en"
+          ],
+          "text": "x.com"
+        },
+        "replyCount": 0,
+        "repostCount": 0,
+        "likeCount": 0,
+        "quoteCount": 0,
+        "indexedAt": "2024-10-30T21:30:34.509Z",
+        "viewer": {
+          "threadMuted": false,
+          "embeddingDisabled": false
+        },
+        "labels": []
+      }
+    },*/
 
 extension TimelineItem: Equatable {
     public static func == (lhs: TimelineItem, rhs: TimelineItem) -> Bool {
@@ -246,10 +297,11 @@ public struct Record: APCodable {
     public let reply: ReplyDetail?
     public let createdAt: String
     public let embed: Embed?
+    public let facets: [Facet]?
     
     enum CodingKeys: String, CodingKey {
         case type = "$type"
-        case langs, reply, createdAt, embed, text
+        case langs, reply, createdAt, embed, text, facets
     }
 }
 
