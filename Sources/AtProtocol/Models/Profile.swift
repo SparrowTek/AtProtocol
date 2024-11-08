@@ -10,7 +10,7 @@ public struct Profile: APCodable {
     public var followsCount: Int
     public var followersCount: Int
     public var postsCount: Int
-    public var indexedAt: Date
+    public var indexedAt: String // TODO: should be a date but not decoding properly
     public var viewer: Viewer
     public var labels: [String]
 }
