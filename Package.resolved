@@ -1,0 +1,15 @@
+{
+  "originHash" : "2f7f0cf4b2dadd83024aed72a639e039dca1c8fc0d16fd0f1e1933dbee7d3d1d",
+  "pins" : [
+    {
+      "identity" : "oauthenticator",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ChimeHQ/OAuthenticator",
+      "state" : {
+        "branch" : "main",
+        "revision" : "7a8ce42e258f9f38f65db0caa7776e3dffbc9ecf"
+      }
+    }
+  ],
+  "version" : 3
+}

@@ -14,9 +14,15 @@ let package = Package(
             name: "AtProtocol",
             targets: ["AtProtocol"]),
     ],
+    dependencies: [
+        .package(url: "https://github.com/ChimeHQ/OAuthenticator", branch: "main"),
+    ],
     targets: [
         .target(
             name: "AtProtocol",
+            dependencies: [
+                "OAuthenticator",
+            ],
             swiftSettings: [
                 .enableExperimentalFeature("StrictConcurrency")
             ]),
