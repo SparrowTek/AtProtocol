@@ -16,12 +16,14 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/ChimeHQ/OAuthenticator", branch: "main"),
+        .package(url: "https://github.com/vapor/jwt-kit.git", from: "5.0.0"),
     ],
     targets: [
         .target(
             name: "AtProtocol",
             dependencies: [
                 "OAuthenticator",
+                .product(name: "JWTKit", package: "jwt-kit"),
             ],
             swiftSettings: [
                 .enableExperimentalFeature("StrictConcurrency")
