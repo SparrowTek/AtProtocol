@@ -46,13 +46,14 @@ class APRouterDelegate: NetworkRouterDelegate {
     
     func shouldRetry(error: Error, attempts: Int) async throws -> Bool {
         func getNewToken() async throws -> Bool {
-            shouldRefreshToken = true
-            let newSession = try await AtProtoLexicons().refresh(attempts: attempts + 1)
-            APEnvironment.current.accessToken = newSession.accessJwt
-            APEnvironment.current.refreshToken = newSession.refreshJwt
-            await delegate?.sessionUpdated(newSession)
-            
-            return true
+//            shouldRefreshToken = true
+//            let newSession = try await AtProtoLexicons().refresh(attempts: attempts + 1)
+//            APEnvironment.current.accessToken = newSession.accessJwt
+//            APEnvironment.current.refreshToken = newSession.refreshJwt
+//            await delegate?.sessionUpdated(newSession)
+//            
+//            return true
+            false
         }
         
         // TODO: verify this works!
